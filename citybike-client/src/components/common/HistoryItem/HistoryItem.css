@@ -1,0 +1,19 @@
+.history-item {
+  background: #000000;
+  border: none;
+  border-radius: 50%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  color: aliceblue;
+  font-weight: bold;
+  font-size: large;
+  padding: 1.5%;
+  margin: 1% 1% 0 1%;
+}
+
+.history-item:hover {
+  background: aliceblue;
+  border: #000000 solid 2px;
+  color: #000000;
+}

@@ -15,6 +15,7 @@ class App extends Component {
       latitude: 0,
       longitude: 0,
       zoom: 13,
+      data: {},
       stations: [],
       history: [],
     };
@@ -22,14 +23,15 @@ class App extends Component {
     this.getHistory = this.getHistory.bind(this);
     this.activateHistoryMode = this.activateHistoryMode.bind(this);
     this.deactivateHistoryMode = this.deactivateHistoryMode.bind(this);
+    this.saveHistory = this.saveHistory.bind(this);
     this.socket = socketIOClient(this.state.endpoint);
   }
   componentDidMount() {
     this.deactivateHistoryMode();
     this.socket.on("city-data", (data) => {
-      console.log(data);
       this.setState({
         ...this.state,
+        data: data,
         latitude: data.location.latitude,
         longitude: data.location.longitude,
         stations: data.stations,
@@ -38,7 +40,6 @@ class App extends Component {
 
     this.socket.on("history", (history) => {
       this.setState({ history });
-      console.log(this.state.history);
     });
   }
 
@@ -57,13 +58,16 @@ class App extends Component {
   getHistory(index) {
     this.activateHistoryMode();
     const data = this.state.history[index];
-    console.log(data);
     this.setState({
       ...this.state,
       latitude: data.location.latitude,
       longitude: data.location.longitude,
       stations: data.stations,
     });
+  }
+
+  saveHistory() {
+    this.socket.emit("save-history", this.state.data);
   }
 
   render() {
@@ -85,6 +89,7 @@ class App extends Component {
           ) : (
             <Button onClick={this.activateHistoryMode} message="History mode" />
           )}
+          <Button onClick={this.saveHistory} message="Save history" />
         </div>
 
         <MapComponent

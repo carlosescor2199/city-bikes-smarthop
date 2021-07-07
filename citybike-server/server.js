@@ -37,7 +37,16 @@ io.on("connection", (socket) => {
 
   socket.on("view-history", () => {
     socket.emit("history", history);
-  })
+  });
+
+  socket.on("save-history", (network) => {
+    if (history.length >= 0 && history.length < 10) {
+      history.push(network);
+    } else {
+      history.shift();
+      history.push(network);
+    }
+  });
 });
 
 function emitData(socket) {
@@ -45,13 +54,6 @@ function emitData(socket) {
     .get(citybikeurl)
     .then((res) => {
       socket.emit("city-data", res.data.network);
-
-      if (history.length >= 0 && history.length < 10) {
-        history.push(res.data.network);
-      } else {
-        history.shift();
-        history.push(res.data.network);
-      }
     })
     .catch((err) => console.log(err.message));
 }
